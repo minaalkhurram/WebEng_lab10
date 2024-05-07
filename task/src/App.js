@@ -1,25 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+// App.js
+import React, { useEffect, useState } from 'react';
+import { fetchHtmlContent } from './htmlContentReader';
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [htmlContent, setHtmlContent] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const content = await fetchHtmlContent();
+            setHtmlContent(content);
+        };
+        fetchData();
+    }, []);
+
+    return (
+        <div className="App">
+            <h1>HTML Content:</h1>
+            {htmlContent ? (
+                <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            ) : (
+                <p>Loading...</p>
+            )}
+        </div>
+    );
 }
 
 export default App;
